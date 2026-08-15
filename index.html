@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Emergency Comfort Package 🌸🍫</title>
+  <style>
+    :root {
+      --bg-color: #fdf0f2;
+      --card-bg: #ffffff;
+      --accent: #e88a99;
+      --text: #4a3437;
+      --chocolate: #5c3a21;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #c85a6e;
+      margin-bottom: 5px;
+    }
+
+    /* Grid Layout for Features */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 850px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(232, 138, 153, 0.15);
+      text-align: center;
+      border: 2px solid #f7d6dc;
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      color: #c85a6e;
+      margin-top: 0;
+    }
+
+    /* Chocolate Box Styling */
+    .choc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .choc-item {
+      background: var(--chocolate);
+      color: #fff;
+      height: 60px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+      user-select: none;
+    }
+
+    .choc-item:hover {
+      transform: scale(1.05);
+    }
+
+    .choc-item.eaten {
+      background: #e0d0cc;
+      cursor: default;
+      transform: none;
+    }
+
+    /* Flower Builder Styling */
+    .flower-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .flower-btn {
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 8px;
+      transition: transform 0.2s;
+      user-select: none;
+    }
+
+    .flower-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .vase {
+      min-height: 80px;
+      background: #fff8f9;
+      border: 2px dashed var(--accent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      padding: 10px;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    /* Comfort Note Display */
+    .message-banner {
+      width: 100%;
+      max-width: 850px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border: 2px solid var(--accent);
+      box-sizing: border-box;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Gentle Hug Button */
+    .hug-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .hug-btn:hover {
+      background: #d67282;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Special Delivery For You 💌</h1>
+    <p>A little emergency comfort kit to brighten your day!</p>
+  </header>
+
+  <div class="grid-container">
+    
+    <!-- Virtual Chocolate Box -->
+    <div class="card">
+      <h2>🍫 Virtual Box of Chocolates</h2>
+      <p style="font-size: 0.85rem; color: #888;">Click a piece to eat it!</p>
+      <div class="choc-grid">
+        <div class="choc-item" onclick="eatChocolate(this, '🍫 Smooth Milk Chocolate: You deserve all the rest in the world today.')">🍬</div>
+        <div class="choc-item" onclick="eatChocolate(this, '🍫 Dark Chocolate Truffle: Valid for 1 real hot chocolate / sweet treat!')">🍩</div>
+        <div class="choc-item" onclick="eatChocolate(this, '🍫 Hazelnut Praline: Reminder that you are doing great, even if you feel tired.')">🌰</div>
+        <div class="choc-item" onclick="eatChocolate(this, '🍫 Salted Caramel: Sending you the biggest, warmest virtual hug.')">🍮</div>
+        <div class="choc-item" onclick="eatChocolate(this, '🍫 White Chocolate Strawberry: You are so loved and appreciated.')">🍓</div>
+        <div class="choc-item" onclick="eatChocolate(this, '🍫 Golden Caramel: Zero calories, 100% sweetness just for you.')">✨</div>
+      </div>
+    </div>
+
+    <!-- Flower Bouquet Builder -->
+    <div class="card">
+      <h2>💐 Pick Your Bouquet</h2>
+      <p style="font-size: 0.85rem; color: #888;">Click flowers to put them in your vase!</p>
+      <div class="flower-options">
+        <span class="flower-btn" onclick="addFlower('🌸')">🌸</span>
+        <span class="flower-btn" onclick="addFlower('🌹')">🌹</span>
+        <span class="flower-btn" onclick="addFlower('🌻')">🌻</span>
+        <span class="flower-btn" onclick="addFlower('🌷')">🌷</span>
+        <span class="flower-btn" onclick="addFlower('🌺')">🌺</span>
+      </div>
+      <div class="vase" id="vase">
+        <span style="font-size: 0.9rem; color: #aaa;">Your vase is empty... click above!</span>
+      </div>
+    </div>
+
+    <!-- Heating Pad / Warmth Card -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>🧸 Emergency Comfort Button</h2>
+      <p>Feeling crampy or exhausted? Press below for an instant cozy boost.</p>
+      <button class="hug-btn" onclick="sendWarmth()">Press for a Warm Hug 🤗</button>
+    </div>
+
+  </div>
+
+  <!-- Dynamic Message Box -->
+  <div class="message-banner" id="msg-box">
+    💖 Pick a chocolate or add some flowers to start relaxing...
+  </div>
+
+  <script>
+    const msgBox = document.getElementById('msg-box');
+    const vase = document.getElementById('vase');
+    let flowerCount = 0;
+
+    function eatChocolate(element, message) {
+      if (!element.classList.contains('eaten')) {
+        element.classList.add('eaten');
+        element.innerText = '😋';
+        msgBox.innerText = message;
+      }
+    }
+
+    function addFlower(flowerEmoji) {
+      if (flowerCount === 0) {
+        vase.innerHTML = ''; // Clear placeholder text
+      }
+      const flowerSpan = document.createElement('span');
+      flowerSpan.innerText = flowerEmoji;
+      vase.appendChild(flowerSpan);
+      flowerCount++;
+      
+      msgBox.innerText = `💐 Added a fresh ${flowerEmoji} to your bouquet!`;
+    }
+
+    function sendWarmth() {
+      const cozyMessages = [
+        "🧸 *Sending virtual heating pad warmth and endless soft blankets...*",
+        "☕ *Brewing a fresh virtual tea with extra honey just for you...*",
+        "💕 *Reminder: Put your feet up, relax, and let yourself rest today!*"
+      ];
+      const randomMsg = cozyMessages[Math.floor(Math.random() * cozyMessages.length)];
+      msgBox.innerText = randomMsg;
+    }
+  </script>
+</body>
+</html>
