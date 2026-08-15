@@ -269,7 +269,7 @@
       to { transform: translateY(0) scale(1); }
     }
 
-    /* 3. COFFEE & UPGRADED HEATING PAD TAB */
+    /* 3. UPGRADED COFFEE & HEATING PAD TAB */
     .cozy-interactive {
       display: flex;
       flex-direction: column;
@@ -278,43 +278,125 @@
       width: 100%;
     }
 
-    .cocoa-container {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    /* Interactive Cocoa Stage */
+    .cocoa-stage {
       width: 100%;
       background: #fff0f3;
-      padding: 12px 15px;
-      border-radius: 20px;
       border: 2px solid var(--pink-border);
+      border-radius: 24px;
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
     }
 
-    .cocoa-mug {
-      font-size: 3.5rem;
+    .mug-interactive-area {
+      position: relative;
+      width: 140px;
+      height: 130px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
       cursor: pointer;
-      transition: transform 0.3s ease;
     }
 
-    .cocoa-mug:active { transform: scale(0.9) rotate(-8deg); }
+    /* Floating Animated Steam */
+    .steam-container {
+      position: absolute;
+      top: -15px;
+      display: flex;
+      gap: 8px;
+      opacity: 0.7;
+    }
 
-    .ingredients {
+    .steam-particle {
+      font-size: 1.1rem;
+      animation: floatSteam 2.5s infinite ease-in-out;
+    }
+
+    .steam-particle:nth-child(2) { animation-delay: 0.6s; }
+    .steam-particle:nth-child(3) { animation-delay: 1.2s; }
+
+    @keyframes floatSteam {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-25px) scale(1.2); opacity: 0; }
+    }
+
+    /* Animated Spoon */
+    .spoon {
+      position: absolute;
+      top: 5px;
+      right: 25px;
+      font-size: 2.2rem;
+      transition: transform 0.3s ease;
+      transform-origin: bottom center;
+      z-index: 2;
+    }
+
+    .mug-body {
+      font-size: 5.5rem;
+      line-height: 1;
+      position: relative;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.06));
+    }
+
+    .mug-interactive-area:active .mug-body {
+      transform: scale(0.95);
+    }
+
+    /* Visual Toppings Dropped Inside Mug */
+    .toppings-overlay {
+      position: absolute;
+      top: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      justify-content: center;
+      gap: 2px;
+      z-index: 3;
+      pointer-events: none;
     }
 
-    .chip {
+    .topping-item {
+      font-size: 0.9rem;
+      animation: dropIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes dropIn {
+      from { transform: translateY(-20px) scale(0); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .ingredients-grid {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .chip-btn {
       background: white;
-      border: 1px solid var(--pink-accent);
+      border: 2px solid var(--pink-accent);
       color: var(--text-dark);
-      padding: 6px 10px;
-      border-radius: 15px;
-      font-size: 0.78rem;
-      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 18px;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      transition: transform 0.15s, background 0.2s;
     }
 
-    /* Squishy Heating Pad Container */
+    .chip-btn:active { transform: scale(0.92); }
+
+    /* Plush Heating Pad Container */
     .heating-pad-wrapper {
       width: 100%;
       display: flex;
@@ -342,14 +424,11 @@
     }
 
     .plush-pad:active {
-      transform: scaleX(1.05) scaleY(0.85); /* Plush squish animation */
+      transform: scaleX(1.05) scaleY(0.85);
       box-shadow: 0 3px 10px rgba(255, 117, 143, 0.4);
     }
 
-    .pad-face {
-      font-size: 2.2rem;
-      margin-bottom: 2px;
-    }
+    .pad-face { font-size: 2.2rem; margin-bottom: 2px; }
 
     .pad-label {
       font-size: 0.85rem;
@@ -453,22 +532,37 @@
       </div>
     </section>
 
-    <!-- 3. COFFEE & UPGRADED HEATING PAD TAB -->
+    <!-- 3. UPGRADED COFFEE & HEATING PAD TAB -->
     <section class="tab-content" id="tab-cozy">
       <div class="section-header">
         <h2>Cozy Drinks & Warmth</h2>
-        <p>Brew a warm drink or squish the pad for warmth!</p>
+        <p>Tap the mug to stir your drink or add sweet toppings!</p>
       </div>
 
       <div class="cozy-interactive">
         
-        <!-- Hot Cocoa Mini Station -->
-        <div class="cocoa-container">
-          <div class="cocoa-mug" id="mug" onclick="stirMug()">☕</div>
-          <div class="ingredients">
-            <span class="chip" onclick="addIngredient('☁️ Marshmallows')">+ Marshmallows</span>
-            <span class="chip" onclick="addIngredient('✨ Sprinkles')">+ Sprinkles</span>
-            <span class="chip" onclick="addIngredient('🍫 Choc Drizzle')">+ Choc Drizzle</span>
+        <!-- Animated Interactive Cocoa Mug -->
+        <div class="cocoa-stage">
+          <div class="mug-interactive-area" onclick="stirCocoa()">
+            
+            <div class="steam-container">
+              <span class="steam-particle">💨</span>
+              <span class="steam-particle">✨</span>
+              <span class="steam-particle">💨</span>
+            </div>
+
+            <div class="spoon" id="spoon">🥄</div>
+            <div class="mug-body">☕</div>
+
+            <!-- Visible Toppings Added Inside -->
+            <div class="toppings-overlay" id="toppings-overlay"></div>
+          </div>
+
+          <div class="ingredients-grid">
+            <button class="chip-btn" onclick="addTopping('☁️', 'Marshmallows')">+ ☁️ Marshmallow</button>
+            <button class="chip-btn" onclick="addTopping('✨', 'Star Sprinkles')">+ ✨ Sprinkles</button>
+            <button class="chip-btn" onclick="addTopping('🍫', 'Choc Drizzle')">+ 🍫 Choc Drizzle</button>
+            <button class="chip-btn" onclick="addTopping('🍓', 'Strawberry Drop')">+ 🍓 Strawberry</button>
           </div>
         </div>
 
@@ -506,7 +600,7 @@
   </div>
 
   <script>
-    // Tab Navigation Logic
+    // Tab Navigation
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -556,20 +650,39 @@
       }
     }
 
-    // Cocoa Logic
-    function stirMug() {
-      const mug = document.getElementById('mug');
-      mug.style.transform = "scale(1.2) rotate(10deg)";
-      setTimeout(() => mug.style.transform = "scale(1)", 200);
-      document.getElementById('banner').innerText = "☕ Stirred your hot cocoa to keep it warm!";
+    // Upgraded Cocoa & Stirring Mechanics
+    function stirCocoa() {
+      const spoon = document.getElementById('spoon');
+      const banner = document.getElementById('banner');
+
+      // Stirring rotation animation
+      spoon.style.transform = "rotate(-35deg) scale(1.1)";
+      setTimeout(() => spoon.style.transform = "rotate(0deg) scale(1)", 300);
+
+      banner.innerText = "☕ Stirred your hot cocoa to keep it extra warm & sweet!";
+      confetti({ particleCount: 12, spread: 30, origin: { y: 0.6 } });
     }
 
-    function addIngredient(name) {
-      stirMug();
-      document.getElementById('banner').innerText = `☕ Topped your drink with ${name}!`;
+    let toppingCount = 0;
+    function addTopping(emoji, name) {
+      const overlay = document.getElementById('toppings-overlay');
+      const banner = document.getElementById('banner');
+
+      if (toppingCount < 6) {
+        const item = document.createElement('span');
+        item.className = 'topping-item';
+        item.innerText = emoji;
+        overlay.appendChild(item);
+
+        toppingCount++;
+        stirCocoa();
+        banner.innerText = `☕ Dropped ${name} straight into your hot cocoa!`;
+      } else {
+        banner.innerText = "☕ Your hot cocoa is completely packed with delicious toppings!";
+      }
     }
 
-    // Interactive Squishy Heating Pad Logic
+    // Interactive Heating Pad Logic
     let comfortLevel = 0;
     function squishPad() {
       const padFace = document.getElementById('pad-face');
