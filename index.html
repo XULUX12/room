@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Emergency Comfort Package 🌸🍫</title>
+  <title>Comfort kit for my baby🌸🍫</title>
+  <!-- Canvas Confetti Library for maximum fun -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
-      --bg-color: #fdf0f2;
+      --bg: #fcf0f2;
       --card-bg: #ffffff;
-      --accent: #e88a99;
+      --accent: #ff758f;
+      --accent-hover: #ff4d6d;
       --text: #4a3437;
-      --chocolate: #5c3a21;
+      --choc: #4a2810;
     }
 
     body {
       margin: 0;
-      padding: 20px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-color);
+      padding: 20px 10px;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
       color: var(--text);
       display: flex;
       flex-direction: column;
@@ -28,229 +31,395 @@
 
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     h1 {
-      color: #c85a6e;
-      margin-bottom: 5px;
+      color: #c84b61;
+      margin: 0 0 5px 0;
+      font-size: 2rem;
     }
 
-    /* Grid Layout for Features */
-    .grid-container {
+    /* Grid Layout */
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 20px;
       width: 100%;
-      max-width: 850px;
-      margin-bottom: 20px;
+      max-width: 900px;
+      margin-bottom: 25px;
     }
 
     .card {
       background: var(--card-bg);
-      border-radius: 16px;
+      border-radius: 20px;
       padding: 20px;
-      box-shadow: 0 8px 20px rgba(232, 138, 153, 0.15);
-      text-align: center;
-      border: 2px solid #f7d6dc;
+      box-shadow: 0 10px 25px rgba(255, 117, 143, 0.15);
+      border: 2px solid #ffccd5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
     }
 
     .card h2 {
-      font-size: 1.2rem;
-      color: #c85a6e;
-      margin-top: 0;
+      font-size: 1.25rem;
+      color: #c84b61;
+      margin: 0 0 10px 0;
     }
 
-    /* Chocolate Box Styling */
-    .choc-grid {
+    /* 1. CHOCOLATE BOX & UNWRAPPING */
+    .choc-wrapper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+    }
+
+    .choc-box {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 15px;
+      gap: 12px;
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      background: #2b1704;
+      border-radius: 15px;
+      border: 4px solid #d4a373;
     }
 
-    .choc-item {
-      background: var(--chocolate);
-      color: #fff;
-      height: 60px;
-      border-radius: 10px;
+    .choc-lid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ff758f, #ff4d6d);
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    }
+
+    .choc-lid.open {
+      transform: translateY(-120%) rotate(-5deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choc-piece {
+      background: radial-gradient(circle, #6b3e26, #3d2010);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
-      transition: transform 0.2s, background 0.3s;
+      transition: transform 0.2s, box-shadow 0.2s;
       user-select: none;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 6px rgba(0,0,0,0.3);
     }
 
-    .choc-item:hover {
-      transform: scale(1.05);
+    .choc-piece:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 12px #ffb3c1;
     }
 
-    .choc-item.eaten {
-      background: #e0d0cc;
+    .choc-piece.eaten {
+      background: #1a0f05;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
       cursor: default;
       transform: none;
     }
 
-    /* Flower Builder Styling */
-    .flower-options {
+    /* 2. DYNAMIC BOUQUET BUILDER */
+    .flower-picker {
       display: flex;
-      justify-content: center;
       gap: 10px;
-      font-size: 1.8rem;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     .flower-btn {
+      font-size: 1.8rem;
+      background: #fff0f3;
+      border: 2px solid #ffccd5;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      padding: 5px;
-      border-radius: 8px;
       transition: transform 0.2s;
-      user-select: none;
     }
 
     .flower-btn:hover {
-      transform: scale(1.2);
+      transform: scale(1.2) rotate(10deg);
+      background: #ffe5ec;
     }
 
-    .vase {
-      min-height: 80px;
-      background: #fff8f9;
-      border: 2px dashed var(--accent);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      padding: 10px;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-
-    /* Comfort Note Display */
-    .message-banner {
+    .vase-container {
       width: 100%;
-      max-width: 850px;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border: 2px solid var(--accent);
-      box-sizing: border-box;
-      min-height: 70px;
+      height: 150px;
+      background: #fff8f9;
+      border-radius: 15px;
+      border: 2px dashed #ffb3c1;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-bottom: 10px;
+    }
+
+    .bloomed-flower {
+      font-size: 2.2rem;
+      animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      margin: 0 -5px;
+      filter: drop-shadow(0 4px 3px rgba(0,0,0,0.1));
+    }
+
+    @keyframes popUp {
+      0% { transform: translateY(50px) scale(0); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    /* 3. HOT COCOA CREATOR */
+    .cocoa-display {
+      font-size: 4rem;
+      margin: 10px 0;
+      position: relative;
+      transition: transform 0.3s;
+    }
+
+    .ingredient-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
       justify-content: center;
     }
 
-    /* Gentle Hug Button */
-    .hug-btn {
+    .ing-btn {
+      background: #fff0f3;
+      border: 1px solid #ff758f;
+      color: var(--text);
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .ing-btn:hover {
+      background: var(--accent);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* 4. HEATING PAD / COMFORT METER */
+    .meter-outer {
+      width: 100%;
+      height: 20px;
+      background: #ffe5ec;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1px solid #ffb3c1;
+    }
+
+    .meter-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff758f, #ff4d6d);
+      transition: width 0.3s ease;
+    }
+
+    .warm-btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 12px 24px;
+      padding: 12px 20px;
       border-radius: 25px;
       font-size: 1rem;
-      cursor: pointer;
       font-weight: bold;
-      transition: background 0.3s, transform 0.2s;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255, 117, 143, 0.4);
+      transition: background 0.2s, transform 0.1s;
     }
 
-    .hug-btn:hover {
-      background: #d67282;
-      transform: scale(1.05);
+    .warm-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* LIVE BANNER DISPLAY */
+    .banner {
+      width: 100%;
+      max-width: 900px;
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 20px rgba(255, 117, 143, 0.15);
+      border: 2px solid var(--accent);
+      box-sizing: border-box;
+      min-height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #c84b61;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Special Delivery For You 💌</h1>
-    <p>A little emergency comfort kit to brighten your day!</p>
+    <h1>Emergency Comfort Kit 🌸🍫</h1>
+    <p>Custom made for you to relax, unwrap, and stay cozy today!</p>
   </header>
 
-  <div class="grid-container">
+  <div class="grid">
     
-    <!-- Virtual Chocolate Box -->
+    <!-- CARD 1: CHOCOLATE BOX -->
     <div class="card">
-      <h2>🍫 Virtual Box of Chocolates</h2>
-      <p style="font-size: 0.85rem; color: #888;">Click a piece to eat it!</p>
-      <div class="choc-grid">
-        <div class="choc-item" onclick="eatChocolate(this, '🍫 Smooth Milk Chocolate: You deserve all the rest in the world today.')">🍬</div>
-        <div class="choc-item" onclick="eatChocolate(this, '🍫 Dark Chocolate Truffle: Valid for 1 real hot chocolate / sweet treat!')">🍩</div>
-        <div class="choc-item" onclick="eatChocolate(this, '🍫 Hazelnut Praline: Reminder that you are doing great, even if you feel tired.')">🌰</div>
-        <div class="choc-item" onclick="eatChocolate(this, '🍫 Salted Caramel: Sending you the biggest, warmest virtual hug.')">🍮</div>
-        <div class="choc-item" onclick="eatChocolate(this, '🍫 White Chocolate Strawberry: You are so loved and appreciated.')">🍓</div>
-        <div class="choc-item" onclick="eatChocolate(this, '🍫 Golden Caramel: Zero calories, 100% sweetness just for you.')">✨</div>
+      <h2>🍫 Chocolate ?</h2>
+      <div class="choc-wrapper">
+        <div class="choc-lid" id="choc-lid" onclick="unwrapBox()">
+          <span style="font-size: 2.5rem;">🎁</span>
+          <span>Click to Unwrap!</span>
+        </div>
+        <div class="choc-box">
+          <div class="choc-piece" onclick="eatChoc(this, '🍩 Silk Caramel: You deserve pure rest today!')">🍬</div>
+          <div class="choc-piece" onclick="eatChoc(this, '🍓 Strawberry Cream: Valid for 1 real sweet treat when we meet!')">🍓</div>
+          <div class="choc-piece" onclick="eatChoc(this, '🌰 Hazelnut Crunch: Sending you a giant warm kiss!')">🌰</div>
+          <div class="choc-piece" onclick="eatChoc(this, '🍮 Dark Truffle: Zero stress allowed for the rest of the day.')">🍮</div>
+          <div class="choc-piece" onclick="eatChoc(this, '✨ Golden Honey: You are so deeply loved.')">🍯</div>
+          <div class="choc-piece" onclick="eatChoc(this, '🍪 Milk Cookie Fudge: Take a cozy nap whenever you want!')">🍪</div>
+        </div>
       </div>
     </div>
 
-    <!-- Flower Bouquet Builder -->
+    <!-- CARD 2: BOUQUET BUILDER -->
     <div class="card">
-      <h2>💐 Pick Your Bouquet</h2>
-      <p style="font-size: 0.85rem; color: #888;">Click flowers to put them in your vase!</p>
-      <div class="flower-options">
-        <span class="flower-btn" onclick="addFlower('🌸')">🌸</span>
-        <span class="flower-btn" onclick="addFlower('🌹')">🌹</span>
-        <span class="flower-btn" onclick="addFlower('🌻')">🌻</span>
-        <span class="flower-btn" onclick="addFlower('🌷')">🌷</span>
-        <span class="flower-btn" onclick="addFlower('🌺')">🌺</span>
+      <h2>💐 Bloom Your Bouquet</h2>
+      <div class="flower-picker">
+        <div class="flower-btn" onclick="plantFlower('🌸')">🌸</div>
+        <div class="flower-btn" onclick="plantFlower('🌹')">🌹</div>
+        <div class="flower-btn" onclick="plantFlower('🌻')">🌻</div>
+        <div class="flower-btn" onclick="plantFlower('🌷')">🌷</div>
+        <div class="flower-btn" onclick="plantFlower('🌺')">🌺</div>
       </div>
-      <div class="vase" id="vase">
-        <span style="font-size: 0.9rem; color: #aaa;">Your vase is empty... click above!</span>
+      <div class="vase-container" id="vase">
+        <span id="vase-placeholder" style="color: #aaa; font-size: 0.9rem; position: absolute; top: 40%;">Click flowers to build a bouquet!</span>
       </div>
     </div>
 
-    <!-- Heating Pad / Warmth Card -->
-    <div class="card" style="grid-column: 1 / -1;">
-      <h2>🧸 Emergency Comfort Button</h2>
-      <p>Feeling crampy or exhausted? Press below for an instant cozy boost.</p>
-      <button class="hug-btn" onclick="sendWarmth()">Press for a Warm Hug 🤗</button>
+    <!-- CARD 3: HOT COCOA STATION -->
+    <div class="card">
+      <h2>☕ chocolate milk for my princess ?</h2>
+      <div class="cocoa-display" id="cocoa-cup">☕</div>
+      <div class="ingredient-btns">
+        <button class="ing-btn" onclick="addIngredient('🥛 Extra Whipped Cream', '🍦')">+ Whipped Cream</button>
+        <button class="ing-btn" onclick="addIngredient('☁️ Mini Marshmallows', '🍡')">+ Marshmallows</button>
+        <button class="ing-btn" onclick="addIngredient('🍫 Chocolate Drizzle', '🍫')">+ Choc Drizzle</button>
+        <button class="ing-btn" onclick="addIngredient('💖 Heart Sprinkles', '✨')">+ Sprinkles</button>
+      </div>
+    </div>
+
+    <!-- CARD 4: HEATING PAD & COMFORT METER -->
+    <div class="card">
+      <h2>🧸 use this it will help sweetheart </h2>
+      <p style="font-size: 0.85rem; color: #666; margin: 0 0 10px 0;">Charge up the warmth gauge for maximum comfort!</p>
+      <div class="meter-outer">
+        <div class="meter-inner" id="meter"></div>
+      </div>
+      <button class="warm-btn" onclick="chargeHeat()">Press for Warmth 🤗</button>
     </div>
 
   </div>
 
-  <!-- Dynamic Message Box -->
-  <div class="message-banner" id="msg-box">
-    💖 Pick a chocolate or add some flowers to start relaxing...
+  <!-- DYNAMIC LIVE DISPLAY BANNER -->
+  <div class="banner" id="banner">
+    ✨ Unwrap your chocolates or start brewing cocoa...
   </div>
 
   <script>
-    const msgBox = document.getElementById('msg-box');
-    const vase = document.getElementById('vase');
-    let flowerCount = 0;
+    const banner = document.getElementById('banner');
 
-    function eatChocolate(element, message) {
+    // 1. Chocolate Unwrap & Confetti
+    function unwrapBox() {
+      document.getElementById('choc-lid').classList.add('open');
+      banner.innerText = "🎉 Box unwrapped! Pick a chocolate piece to taste it.";
+      confetti({ particleCount: 40, spread: 60, origin: { y: 0.4 } });
+    }
+
+    function eatChoc(element, message) {
       if (!element.classList.contains('eaten')) {
         element.classList.add('eaten');
         element.innerText = '😋';
-        msgBox.innerText = message;
+        banner.innerText = message;
+        confetti({ particleCount: 25, spread: 40, origin: { y: 0.5 } });
       }
     }
 
-    function addFlower(flowerEmoji) {
-      if (flowerCount === 0) {
-        vase.innerHTML = ''; // Clear placeholder text
-      }
-      const flowerSpan = document.createElement('span');
-      flowerSpan.innerText = flowerEmoji;
-      vase.appendChild(flowerSpan);
-      flowerCount++;
+    // 2. Bouquet Builder
+    let flowerCount = 0;
+    function plantFlower(emoji) {
+      const vase = document.getElementById('vase');
+      const placeholder = document.getElementById('vase-placeholder');
       
-      msgBox.innerText = `💐 Added a fresh ${flowerEmoji} to your bouquet!`;
+      if (placeholder) placeholder.remove();
+
+      if (flowerCount < 7) {
+        const span = document.createElement('span');
+        span.className = 'bloomed-flower';
+        span.innerText = emoji;
+        vase.appendChild(span);
+        flowerCount++;
+        banner.innerText = `💐 Beautiful! Added a fresh ${emoji} to your arrangement.`;
+      } else {
+        banner.innerText = "💐 Your bouquet is fully bloomed and smelling lovely!";
+        confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+      }
     }
 
-    function sendWarmth() {
-      const cozyMessages = [
-        "🧸 *Sending virtual heating pad warmth and endless soft blankets...*",
-        "☕ *Brewing a fresh virtual tea with extra honey just for you...*",
-        "💕 *Reminder: Put your feet up, relax, and let yourself rest today!*"
-      ];
-      const randomMsg = cozyMessages[Math.floor(Math.random() * cozyMessages.length)];
-      msgBox.innerText = randomMsg;
+    // 3. Hot Cocoa Station
+    let cocoaAddons = [];
+    function addIngredient(name, emoji) {
+      cocoaAddons.push(name);
+      const cup = document.getElementById('cocoa-cup');
+      cup.style.transform = "scale(1.2) rotate(5deg)";
+      setTimeout(() => cup.style.transform = "scale(1)", 200);
+
+      banner.innerText = `☕ Added ${name}! Current cocoa: Hot Chocolate with ${cocoaAddons.length} yummy toppings.`;
+    }
+
+    // 4. Heating Pad & Charge Meter
+    let heatLevel = 0;
+    function chargeHeat() {
+      if (heatLevel < 100) {
+        heatLevel += 20;
+        document.getElementById('meter').style.width = heatLevel + '%';
+        
+        if (heatLevel < 100) {
+          banner.innerText = `🧸 Warming up... (${heatLevel}% Cozy)`;
+        } else {
+          banner.innerText = "🔥 100% MAXIMUM COMFORT! Virtual blanket, heating pad, & warm hug fully activated! 🤗";
+          confetti({ particleCount: 80, spread: 80, origin: { y: 0.7 } });
+        }
+      } else {
+        banner.innerText = "🥰 Warmth level is already at maximum capacity! You are completely safe & comfortable.";
+      }
     }
   </script>
 </body>
