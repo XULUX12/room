@@ -37,6 +37,42 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating Tap Words Effect */
+    .floating-word {
+      position: fixed;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #ff4d6d;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 2px solid var(--pink-border);
+      box-shadow: 0 8px 18px rgba(255, 117, 143, 0.2);
+      pointer-events: none;
+      z-index: 9999;
+      animation: floatAndFade 1.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes floatAndFade {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(0.6);
+      }
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -20px) scale(1.05);
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -60px) scale(0.9);
+      }
     }
 
     /* Header & Music Toggle */
@@ -47,6 +83,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      z-index: 10;
     }
 
     .title-area h1 {
@@ -90,6 +127,7 @@
       max-width: 500px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.02);
       backdrop-filter: blur(8px);
+      z-index: 10;
     }
 
     .tab-btn {
@@ -123,6 +161,7 @@
       flex: 1;
       margin-bottom: 20px;
       position: relative;
+      z-index: 10;
     }
 
     .tab-content {
@@ -269,7 +308,7 @@
       to { transform: translateY(0) scale(1); }
     }
 
-    /* 3. UPGRADED COFFEE & HEATING PAD TAB */
+    /* 3. COFFEE & HEATING PAD TAB */
     .cozy-interactive {
       display: flex;
       flex-direction: column;
@@ -278,7 +317,6 @@
       width: 100%;
     }
 
-    /* Interactive Cocoa Stage */
     .cocoa-stage {
       width: 100%;
       background: #fff0f3;
@@ -302,7 +340,6 @@
       cursor: pointer;
     }
 
-    /* Floating Animated Steam */
     .steam-container {
       position: absolute;
       top: -15px;
@@ -325,7 +362,6 @@
       100% { transform: translateY(-25px) scale(1.2); opacity: 0; }
     }
 
-    /* Animated Spoon */
     .spoon {
       position: absolute;
       top: 5px;
@@ -344,11 +380,8 @@
       filter: drop-shadow(0 6px 12px rgba(0,0,0,0.06));
     }
 
-    .mug-interactive-area:active .mug-body {
-      transform: scale(0.95);
-    }
+    .mug-interactive-area:active .mug-body { transform: scale(0.95); }
 
-    /* Visual Toppings Dropped Inside Mug */
     .toppings-overlay {
       position: absolute;
       top: 48px;
@@ -396,7 +429,6 @@
 
     .chip-btn:active { transform: scale(0.92); }
 
-    /* Plush Heating Pad Container */
     .heating-pad-wrapper {
       width: 100%;
       display: flex;
@@ -469,6 +501,7 @@
       color: #c84b61;
       box-shadow: 0 4px 12px rgba(0,0,0,0.03);
       margin-bottom: 20px;
+      z-index: 10;
     }
   </style>
 </head>
@@ -532,7 +565,7 @@
       </div>
     </section>
 
-    <!-- 3. UPGRADED COFFEE & HEATING PAD TAB -->
+    <!-- 3. COFFEE & HEATING PAD TAB -->
     <section class="tab-content" id="tab-cozy">
       <div class="section-header">
         <h2>Cozy Drinks & Warmth</h2>
@@ -544,7 +577,6 @@
         <!-- Animated Interactive Cocoa Mug -->
         <div class="cocoa-stage">
           <div class="mug-interactive-area" onclick="stirCocoa()">
-            
             <div class="steam-container">
               <span class="steam-particle">💨</span>
               <span class="steam-particle">✨</span>
@@ -553,8 +585,6 @@
 
             <div class="spoon" id="spoon">🥄</div>
             <div class="mug-body">☕</div>
-
-            <!-- Visible Toppings Added Inside -->
             <div class="toppings-overlay" id="toppings-overlay"></div>
           </div>
 
@@ -568,7 +598,7 @@
 
         <hr style="width: 100%; border: none; border-top: 1px dashed var(--pink-border); margin: 5px 0;">
 
-        <!-- Upgraded Plush Heating Pad -->
+        <!-- Plush Heating Pad -->
         <div class="heating-pad-wrapper">
           <div class="plush-pad" onclick="squishPad()">
             <div class="pad-face" id="pad-face">(⁠っ⁠.⁠ ⁠a⁠ ⁠.⁠)⁠っ</div>
@@ -600,6 +630,47 @@
   </div>
 
   <script>
+    // List of Cute Words for Background Click
+    const cuteWords = [
+      "I love you 💕",
+      "You're beautiful 🌸",
+      "My favorite human ✨",
+      "Sending huge hugs 🧸",
+      "You're so special 💖",
+      "So proud of you 🌟",
+      "My sweet girl 🌷",
+      "Always thinking of you 💭",
+      "Take it easy today 🍵",
+      "Forever & always 💍",
+      "You're amazing 👑"
+    ];
+
+    // Global Background Tap Listener
+    document.addEventListener('click', function(e) {
+      // Don't spawn text if clicking buttons or interactive cards to prevent clutter
+      if (e.target.closest('button') || e.target.closest('.choc-item') || e.target.closest('.mug-interactive-area') || e.target.closest('.plush-pad') || e.target.closest('.modal-card')) {
+        return;
+      }
+
+      const word = document.createElement('div');
+      word.className = 'floating-word';
+      
+      // Select random word
+      const randomText = cuteWords[Math.floor(Math.random() * cuteWords.length)];
+      word.innerText = randomText;
+
+      // Position word exactly at tap coordinates
+      word.style.left = e.clientX + 'px';
+      word.style.top = e.clientY + 'px';
+
+      document.body.appendChild(word);
+
+      // Clean up after animation finishes
+      setTimeout(() => {
+        word.remove();
+      }, 1600);
+    });
+
     // Tab Navigation
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -655,7 +726,6 @@
       const spoon = document.getElementById('spoon');
       const banner = document.getElementById('banner');
 
-      // Stirring rotation animation
       spoon.style.transform = "rotate(-35deg) scale(1.1)";
       setTimeout(() => spoon.style.transform = "rotate(0deg) scale(1)", 300);
 
