@@ -3,389 +3,521 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Interactive Hug-in-a-Box 💖</title>
+  <title>A Little Care Package For You 🌸</title>
+  <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
-  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #ffeef2 0%, #ffd6e0 100%);
-      --card-bg: rgba(255, 255, 255, 0.9);
-      --primary-pink: #ff5c8a;
-      --secondary-pink: #ff9ebb;
-      --dark-text: #4a2b32;
+      --bg: #fcf4f6;
+      --card-bg: #ffffff;
+      --pink-accent: #ff758f;
+      --pink-soft: #ffe5ec;
+      --pink-border: #ffccd5;
+      --text-dark: #4a3437;
+      --text-muted: #8c5d66;
+      --shadow: 0 12px 30px rgba(255, 117, 143, 0.12);
     }
 
-    * { box-sizing: border-box; user-select: none; }
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     body {
       margin: 0;
-      padding: 20px 10px;
+      padding: 0;
       font-family: 'Fredoka', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--dark-text);
+      background: linear-gradient(180deg, #fdf0f3 0%, #f7e4e8 100%);
+      color: var(--text-dark);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* Floating Lofi Music Player Toggle */
-    .audio-toggle {
-      position: fixed;
-      top: 15px;
-      right: 15px;
+    /* Top Header & Ambient Audio Button */
+    header {
+      width: 100%;
+      max-width: 600px;
+      padding: 25px 20px 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title-area h1 {
+      font-family: 'Nunito', sans-serif;
+      color: #d84b61;
+      font-size: 1.6rem;
+      margin: 0;
+    }
+
+    .title-area p {
+      margin: 3px 0 0 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .audio-btn {
       background: white;
-      border: 3px solid var(--primary-pink);
+      border: 2px solid var(--pink-border);
       border-radius: 50px;
-      padding: 8px 16px;
-      font-weight: bold;
-      color: var(--primary-pink);
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--pink-accent);
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
       transition: transform 0.2s;
     }
-    .audio-toggle:hover { transform: scale(1.05); }
 
-    header { text-align: center; margin-bottom: 20px; }
-    h1 { color: #d83a6f; font-size: 2.2rem; margin: 0; }
-    p { color: #8c4a5c; margin: 5px 0 0 0; }
+    .audio-btn:active { transform: scale(0.95); }
 
-    .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
-      width: 100%;
-      max-width: 1000px;
+    /* Navigation Bar (Clean Tabs) */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 6px;
+      border-radius: 20px;
+      border: 2px solid var(--pink-border);
+      margin: 15px 0 25px 0;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      backdrop-filter: blur(8px);
     }
 
-    .card {
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px 0;
+      border-radius: 14px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .tab-btn.active {
+      background: var(--pink-accent);
+      color: white;
+      box-shadow: 0 4px 10px rgba(255, 117, 143, 0.3);
+    }
+
+    /* Main Interactive View Area */
+    .view-container {
+      width: 90%;
+      max-width: 500px;
+      flex: 1;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .tab-content {
+      display: none;
       background: var(--card-bg);
-      border: 3px solid #ffccd5;
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(255, 92, 138, 0.12);
+      border: 3px solid var(--pink-border);
+      border-radius: 28px;
+      padding: 25px 20px;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.35s ease forwards;
+    }
+
+    .tab-content.active {
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
     }
 
-    .card-title {
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-header h2 {
+      margin: 0;
       font-size: 1.3rem;
-      color: #d83a6f;
-      margin-bottom: 15px;
-      font-weight: 700;
+      color: #c84b61;
     }
 
-    /* 💐 1. DRAG & DROP BOUQUET */
-    .flower-palette {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 15px;
-      background: #fff0f3;
-      padding: 10px 15px;
-      border-radius: 20px;
-      border: 2px dashed #ffb3c1;
+    .section-header p {
+      margin: 4px 0 0 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
     }
 
-    .draggable-flower {
-      font-size: 2.5rem;
-      cursor: grab;
-      transition: transform 0.2s;
-    }
-    .draggable-flower:active { cursor: grabbing; transform: scale(1.2); }
-
-    .drop-vase {
-      width: 130px;
-      height: 160px;
-      background: rgba(255, 255, 255, 0.6);
-      border: 4px solid #f7adb9;
-      border-radius: 30% 30% 45% 45%;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      overflow: visible;
-      box-shadow: 0 8px 15px rgba(0,0,0,0.05);
-    }
-
-    .dropped-flower {
-      position: absolute;
-      font-size: 2.5rem;
-      animation: popDrop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    @keyframes popDrop { 0% { transform: scale(0) translateY(-50px); } 100% { transform: scale(1) translateY(0); } }
-
-    /* 🍫 2. CHOCOLATE BOX & POPUP MODAL */
-    .choc-box {
-      width: 220px;
-      height: 200px;
-      background: #5a2a18;
-      border-radius: 30px;
-      border: 4px solid #d4a373;
+    /* 1. CHOCOLATE TAB */
+    .choc-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      padding: 20px;
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+      width: 100%;
+      background: #3a1c12;
+      padding: 15px;
+      border-radius: 20px;
+      border: 4px solid #c99363;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.4);
     }
 
-    .choc-slot {
-      background: #3d1b0e;
-      border-radius: 50%;
+    .choc-item {
+      background: radial-gradient(circle, #63331c, #3d1b0e);
+      border-radius: 16px;
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
       box-shadow: 0 4px 6px rgba(0,0,0,0.3);
       transition: transform 0.2s;
     }
-    .choc-slot:hover { transform: scale(1.15) rotate(5deg); }
-    .choc-slot.eaten { opacity: 0.3; transform: none; cursor: default; }
 
-    /* Pop-up Card inside Chocolate Box */
-    .choc-popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 85%;
-      background: #ffffff;
-      border: 3px solid var(--primary-pink);
-      border-radius: 20px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 10;
+    .choc-item:active { transform: scale(0.92); }
+    .choc-item.eaten { opacity: 0.25; transform: none; cursor: default; }
+
+    /* Modal Message Card */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 100;
     }
-    .choc-popup.show { transform: translate(-50%, -50%) scale(1); }
 
-    /* ☕ 3. INTERACTIVE HOT COCOA MUG */
-    .mug-wrapper {
-      position: relative;
-      font-size: 5rem;
-      margin: 10px 0;
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .modal-card {
+      background: white;
+      border: 3px solid var(--pink-accent);
+      border-radius: 24px;
+      padding: 25px;
+      width: 85%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.open .modal-card { transform: scale(1); }
+
+    /* 2. BOUQUET TAB */
+    .flower-selection {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .flower-btn {
+      background: var(--pink-soft);
+      border: 2px solid var(--pink-border);
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 1.5rem;
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .mug-wrapper:active { transform: scale(0.95); }
 
-    .steam {
-      position: absolute;
-      top: -20px;
-      left: 35%;
-      font-size: 1.2rem;
-      opacity: 0;
-      animation: floatSteam 2s infinite;
-    }
-    @keyframes floatSteam {
-      0% { transform: translateY(0) scale(0.8); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
-    }
+    .flower-btn:active { transform: scale(0.9); }
 
-    .ingredient-bar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .ing-chip {
-      background: #fff0f3;
-      border: 2px solid #ff9ebb;
-      border-radius: 15px;
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .ing-chip:hover { background: var(--primary-pink); color: white; }
-
-    /* 🧸 4. SQUISHY HEATING PAD */
-    .squish-pad {
+    .vase-stage {
       width: 100%;
-      height: 100px;
-      background: linear-gradient(135deg, #ff85a1, #ff5c8a);
-      border-radius: 25px;
+      height: 200px;
+      background: #fff8f9;
+      border: 2px dashed var(--pink-border);
+      border-radius: 20px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding-bottom: 15px;
+    }
+
+    .stem {
+      position: absolute;
+      font-size: 2.5rem;
+      bottom: 20px;
+      animation: bloom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+    }
+
+    @keyframes bloom {
+      from { transform: translateY(50px) scale(0); }
+      to { transform: translateY(0) scale(1); }
+    }
+
+    /* 3. COFFEE & COMFORT TAB */
+    .cozy-interactive {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(255, 92, 138, 0.3);
-      transition: transform 0.1s, box-shadow 0.2s;
-    }
-    .squish-pad:active {
-      transform: scaleX(1.08) scaleY(0.85); /* Squish effect */
-      box-shadow: 0 2px 10px rgba(255, 92, 138, 0.5);
+      gap: 20px;
+      width: 100%;
     }
 
-    .pad-meter {
-      width: 100%;
-      height: 10px;
-      background: #ffe5ec;
-      border-radius: 5px;
-      margin-top: 15px;
-      overflow: hidden;
+    .cocoa-mug {
+      font-size: 5rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
     }
-    .pad-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--primary-pink);
-      transition: width 0.2s ease;
+
+    .cocoa-mug:active { transform: scale(0.92) rotate(-5deg); }
+
+    .ingredients {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .chip {
+      background: var(--pink-soft);
+      border: 1px solid var(--pink-accent);
+      color: var(--text-dark);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .pad-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ff85a1, #ff5c8a);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 20px;
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(255, 117, 143, 0.3);
+      transition: transform 0.1s;
+    }
+
+    .pad-btn:active { transform: scale(0.96); }
+
+    /* Bottom Shared Message Banner */
+    .bottom-banner {
+      width: 90%;
+      max-width: 500px;
+      background: white;
+      border: 2px solid var(--pink-border);
+      border-radius: 18px;
+      padding: 14px 18px;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #c84b61;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating Lofi Player -->
-  <button class="audio-toggle" onclick="toggleAudio()">🎵 Sound: OFF</button>
-  <audio id="lofi-sound" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
+  <!-- Top Header -->
   <header>
-    <h1>✨ Your Cozy Comfort Station ✨</h1>
-    <p>Drag, tap, and interact with your emergency care package!</p>
+    <div class="title-area">
+      <h1>Care Package 💌</h1>
+      <p>Made just for you to rest & relax</p>
+    </div>
+    <button class="audio-btn" onclick="toggleAudio()" id="audio-toggle">🎵 Music: Off</button>
+    <audio id="bg-audio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
   </header>
 
-  <div class="game-grid">
+  <!-- Clean Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('choc')">🍫 Chocolates</button>
+    <button class="tab-btn" onclick="switchTab('bouquet')">💐 Bouquet</button>
+    <button class="tab-btn" onclick="switchTab('cozy')">☕ Comfort</button>
+  </nav>
 
-    <!-- 💐 1. DRAG & DROP BOUQUET -->
-    <div class="card">
-      <div class="card-title">🌸 Drag Flowers to Vase</div>
-      <div class="flower-palette">
-        <span class="draggable-flower" draggable="true" ondragstart="drag(event)" id="f1">🌹</span>
-        <span class="draggable-flower" draggable="true" ondragstart="drag(event)" id="f2">🌷</span>
-        <span class="draggable-flower" draggable="true" ondragstart="drag(event)" id="f3">🌻</span>
-        <span class="draggable-flower" draggable="true" ondragstart="drag(event)" id="f4">🌼</span>
+  <!-- Main View Area -->
+  <main class="view-container">
+
+    <!-- 1. CHOCOLATE TAB -->
+    <section class="tab-content active" id="tab-choc">
+      <div class="section-header">
+        <h2>Secret Box of Chocolates</h2>
+        <p>Tap a chocolate piece to unwrap a special note!</p>
       </div>
-      <div class="drop-vase" ondragover="allowDrop(event)" ondrop="drop(event)" id="vase">
-        <span style="font-size: 0.8rem; color: #aaa; position: absolute; top: 40%; text-align: center;" id="vase-text">Drop flowers here!</span>
+
+      <div class="choc-grid">
+        <div class="choc-item" onclick="openCard(this, '🍩 Silk Fudge', 'Valid for 1 real hot chocolate or sweet treat delivered to your door!')">🍬</div>
+        <div class="choc-item" onclick="openCard(this, '🍓 Strawberry Truffle', 'Reminder: You are doing amazing, even if you feel tired today.')">🍓</div>
+        <div class="choc-item" onclick="openCard(this, '🌰 Hazelnut Crisp', 'Sending you the biggest, warmest virtual hug right now!')">🌰</div>
+        <div class="choc-item" onclick="openCard(this, '🍮 Dark Chocolate', 'Zero stress allowed for the rest of the day. Rest up!')">🍮</div>
+        <div class="choc-item" onclick="openCard(this, '✨ Honey Praline', 'You are deeply loved and appreciated every single day.')">🍯</div>
+        <div class="choc-item" onclick="openCard(this, '🍪 Cookie Cream', 'Take a cozy nap whenever you want today!')">🍪</div>
       </div>
+    </section>
+
+    <!-- 2. BOUQUET TAB -->
+    <section class="tab-content" id="tab-bouquet">
+      <div class="section-header">
+        <h2>Build Your Custom Bouquet</h2>
+        <p>Pick flowers to arrange your very own bouquet!</p>
+      </div>
+
+      <div class="flower-selection">
+        <button class="flower-btn" onclick="addFlower('🌹', 'Rose')">🌹</button>
+        <button class="flower-btn" onclick="addFlower('🌷', 'Tulip')">🌷</button>
+        <button class="flower-btn" onclick="addFlower('🌼', 'Daisy')">🌼</button>
+        <button class="flower-btn" onclick="addFlower('🌻', 'Sunflower')">🌻</button>
+      </div>
+
+      <div class="vase-stage" id="vase-stage">
+        <span style="color: #aaa; font-size: 0.85rem; position: absolute; top: 45%;" id="vase-empty">Tap flowers above to place them in the vase...</span>
+      </div>
+    </section>
+
+    <!-- 3. COFFEE & COMFORT TAB -->
+    <section class="tab-content" id="tab-cozy">
+      <div class="section-header">
+        <h2>Cozy Drinks & Warmth</h2>
+        <p>Customize your hot cocoa or press for virtual warmth!</p>
+      </div>
+
+      <div class="cozy-interactive">
+        <div class="cocoa-mug" id="mug" onclick="stirMug()">☕</div>
+
+        <div class="ingredients">
+          <span class="chip" onclick="addIngredient('☁️ Extra Marshmallows')">+ Marshmallows</span>
+          <span class="chip" onclick="addIngredient('✨ Star Sprinkles')">+ Sprinkles</span>
+          <span class="chip" onclick="addIngredient('🍫 Choc Drizzle')">+ Choc Drizzle</span>
+        </div>
+
+        <hr style="width: 100%; border: none; border-top: 1px dashed var(--pink-border); margin: 10px 0;">
+
+        <button class="pad-btn" onclick="triggerWarmth()">🧸 Hold For Heating Pad Warmth</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Message Bar -->
+  <div class="bottom-banner" id="banner">
+    💖 Choose a tab to start unwrapping your care package...
+  </div>
+
+  <!-- Pop-Up Modal for Chocolate Notes -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-card">
+      <h3 id="modal-title" style="margin: 0 0 10px 0; color: #c84b61;">Sweet Treat</h3>
+      <p id="modal-text" style="margin: 0 0 20px 0; font-size: 0.95rem; color: var(--text-dark);">Message content</p>
+      <button onclick="closeCard()" style="background: var(--pink-accent); color: white; border: none; border-radius: 12px; padding: 8px 20px; font-family: inherit; font-weight: bold; cursor: pointer;">Close 💕</button>
     </div>
-
-    <!-- 🍫 2. CHOCOLATE BOX WITH FLIP CARDS -->
-    <div class="card">
-      <div class="card-title">🍫 Tap a Chocolate to Eat</div>
-      <div class="choc-box">
-        <div class="choc-slot" onclick="openChoc('🍩 Caramel Fudge', 'Valid for 1 real sweet treat order on me!')">🍬</div>
-        <div class="choc-slot" onclick="openChoc('🍓 Strawberry Cream', 'Reminder: You are deeply loved & appreciated.')">🍓</div>
-        <div class="choc-slot" onclick="openChoc('🌰 Hazelnut Crunch', 'Take a big cozy nap whenever you want today!')">🌰</div>
-        <div class="choc-slot" onclick="openChoc('🍮 Dark Truffle', 'Sending you the biggest, warmest hug right now.')">🍮</div>
-        <div class="choc-slot" onclick="openChoc('✨ Honey Delight', 'Zero stress allowed for the rest of the day.')">🍯</div>
-        <div class="choc-slot" onclick="openChoc('🍪 Cookie Fudge', 'You deserve all the rest in the world today.')">🍪</div>
-      </div>
-
-      <!-- Secret Pop-up Card -->
-      <div class="choc-popup" id="choc-popup">
-        <h3 id="pop-title" style="margin:0 0 5px 0; color:#d83a6f;">Title</h3>
-        <p id="pop-msg" style="margin:0 0 10px 0; font-size:0.95rem;">Message</p>
-        <button onclick="closeChoc()" style="background:var(--primary-pink); color:white; border:none; border-radius:12px; padding:5px 15px; cursor:pointer;">Close 💕</button>
-      </div>
-    </div>
-
-    <!-- ☕ 3. INTERACTIVE STIRRABLE COCOA -->
-    <div class="card">
-      <div class="card-title">☕ Tap Mug to Stir Cocoa</div>
-      <div class="mug-wrapper" id="mug" onclick="stirCocoa()">
-        <span class="steam" id="steam">💨</span>
-        ☕
-      </div>
-      <div class="ingredient-bar">
-        <span class="ing-chip" onclick="addIng('☁️ Marshmallows')">+ Marshmallows</span>
-        <span class="ing-chip" onclick="addIng('✨ Star Sprinkles')">+ Sprinkles</span>
-        <span class="ing-chip" onclick="addIng('🍫 Choc Drizzle')">+ Choc Drizzle</span>
-      </div>
-    </div>
-
-    <!-- 🧸 4. SQUISHY HEATING PAD -->
-    <div class="card">
-      <div class="card-title">🧸 Press & Squish for Warmth</div>
-      <div class="squish-pad" onclick="squishPad()">
-        <span id="pad-face">(⁠っ⁠.⁠ ⁠a⁠ ⁠.⁠)⁠っ</span>
-        <span style="font-size: 0.8rem; margin-top: 5px;">SQUISH ME!</span>
-      </div>
-      <div class="pad-meter">
-        <div class="pad-fill" id="pad-fill"></div>
-      </div>
-    </div>
-
   </div>
 
   <script>
-    // Lofi Audio Toggle
-    let isPlaying = false;
-    const audio = document.getElementById('lofi-sound');
-    function toggleAudio() {
-      const btn = document.querySelector('.audio-toggle');
-      if (!isPlaying) {
-        audio.play();
-        btn.innerText = "🎵 Sound: ON";
-      } else {
-        audio.pause();
-        btn.innerText = "🎵 Sound: OFF";
+    // Tab Navigation Logic
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+
+    // Modal Chocolate Logic
+    function openCard(element, title, msg) {
+      if (!element.classList.contains('eaten')) {
+        element.classList.add('eaten');
       }
-      isPlaying = !isPlaying;
-    }
-
-    // 1. Drag & Drop Bouquet
-    function allowDrop(ev) { ev.preventDefault(); }
-    function drag(ev) { ev.dataTransfer.setData("text", ev.target.innerText); }
-    function drop(ev) {
-      ev.preventDefault();
-      const emoji = ev.dataTransfer.getData("text");
-      const vase = document.getElementById('vase');
-      document.getElementById('vase-text').style.display = 'none';
-
-      const flower = document.createElement('span');
-      flower.className = 'dropped-flower';
-      flower.innerText = emoji;
-      // Random position inside vase
-      flower.style.left = Math.random() * 60 + 20 + '%';
-      flower.style.bottom = Math.random() * 30 + 40 + 'px';
-
-      vase.appendChild(flower);
-      confetti({ particleCount: 20, spread: 40, origin: { y: 0.6 } });
-    }
-
-    // 2. Chocolate Pop-up
-    function openChoc(title, msg) {
-      document.getElementById('pop-title').innerText = title;
-      document.getElementById('pop-msg').innerText = msg;
-      document.getElementById('choc-popup').classList.add('show');
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-text').innerText = msg;
+      document.getElementById('modal').classList.add('open');
+      
       confetti({ particleCount: 30, spread: 60, origin: { y: 0.5 } });
     }
-    function closeChoc() {
-      document.getElementById('choc-popup').classList.remove('show');
+
+    function closeCard() {
+      document.getElementById('modal').classList.remove('open');
     }
 
-    // 3. Stir Cocoa & Steam
-    function stirCocoa() {
-      const steam = document.getElementById('steam');
-      steam.style.opacity = '1';
-      setTimeout(() => steam.style.opacity = '0', 2000);
-      confetti({ particleCount: 15, spread: 30, origin: { y: 0.6 } });
-    }
-    function addIng(name) {
-      stirCocoa();
-    }
+    // Flower Arrangement Logic
+    let flowerCount = 0;
+    function addFlower(emoji, name) {
+      const vase = document.getElementById('vase-stage');
+      const emptyText = document.getElementById('vase-empty');
+      if (emptyText) emptyText.remove();
 
-    // 4. Squish Heating Pad
-    let heat = 0;
-    function squishPad() {
-      if (heat < 100) {
-        heat += 20;
-        document.getElementById('pad-fill').style.width = heat + '%';
-        if (heat >= 100) {
-          document.getElementById('pad-face').innerText = "(⁠⁠⊃⁠｡⁠•́⁠‿⁠•̀⁠｡⁠)⁠⊃";
-          confetti({ particleCount: 70, spread: 70, origin: { y: 0.7 } });
-        }
+      if (flowerCount < 6) {
+        const flower = document.createElement('span');
+        flower.className = 'stem';
+        flower.innerText = emoji;
+        
+        // Spread flowers inside vase
+        const positions = [-40, -20, 0, 20, 40, 10];
+        flower.style.left = `calc(50% + ${positions[flowerCount]}px - 15px)`;
+
+        vase.appendChild(flower);
+        flowerCount++;
+
+        document.getElementById('banner').innerText = `💐 Added a fresh ${name} to your arrangement!`;
+        confetti({ particleCount: 15, spread: 40, origin: { y: 0.6 } });
+      } else {
+        document.getElementById('banner').innerText = "💐 Your vase is fully bloomed and looking gorgeous!";
       }
+    }
+
+    // Cocoa & Warmth Logic
+    function stirMug() {
+      const mug = document.getElementById('mug');
+      mug.style.transform = "scale(1.2) rotate(10deg)";
+      setTimeout(() => mug.style.transform = "scale(1)", 200);
+      document.getElementById('banner').innerText = "☕ Stirred your hot cocoa to keep it warm!";
+    }
+
+    function addIngredient(name) {
+      stirMug();
+      document.getElementById('banner').innerText = `☕ Topped your drink with ${name}!`;
+    }
+
+    function triggerWarmth() {
+      document.getElementById('banner').innerText = "🧸 Heating pad & blanket warmth activated! Relax into comfort.";
+      confetti({ particleCount: 50, spread: 70, origin: { y: 0.7 } });
+    }
+
+    // Audio Logic
+    let isPlaying = false;
+    const audio = document.getElementById('bg-audio');
+    function toggleAudio() {
+      const btn = document.getElementById('audio-toggle');
+      if (!isPlaying) {
+        audio.play();
+        btn.innerText = "🎵 Music: On";
+      } else {
+        audio.pause();
+        btn.innerText = "🎵 Music: Off";
+      }
+      isPlaying = !isPlaying;
     }
   </script>
 </body>
