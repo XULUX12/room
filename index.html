@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Little Care Package For You 🌸</title>
+  <title>A Little Care Package For My Baby 🌸</title>
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <!-- Google Fonts -->
@@ -510,8 +510,8 @@
   <!-- Top Header -->
   <header>
     <div class="title-area">
-      <h1>Care Package 💌</h1>
-      <p>Made just for you to rest & relax</p>
+      <h1>Comfort Package For My BabyGirl 💌</h1>
+      <p>So my beautiful hasnaa can relax a bit</p>
     </div>
     <button class="audio-btn" onclick="toggleAudio()" id="audio-toggle">🎵 Music: Off</button>
     
@@ -521,9 +521,9 @@
 
   <!-- Navigation Tabs -->
   <nav class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('choc')">🍫 Chocolates</button>
+    <button class="tab-btn active" onclick="switchTab('choc')">🍫 Chocolate ?</button>
     <button class="tab-btn" onclick="switchTab('bouquet')">💐 Bouquet</button>
-    <button class="tab-btn" onclick="switchTab('cozy')">☕ Comfort</button>
+    <button class="tab-btn" onclick="switchTab('cozy')">☕ Hot Milk</button>
   </nav>
 
   <!-- Main View Area -->
@@ -532,16 +532,16 @@
     <!-- 1. CHOCOLATE TAB -->
     <section class="tab-content active" id="tab-choc">
       <div class="section-header">
-        <h2>Secret Box of Chocolates</h2>
+        <h2>Some Chocolate For My Delicious Baby</h2>
         <p>Tap a chocolate piece to unwrap a special note!</p>
       </div>
 
       <div class="choc-grid">
-        <div class="choc-item" onclick="openCard(this, '🍩 Silk Fudge', 'Valid for 1 real hot chocolate or sweet treat delivered to your door!')">🍬</div>
+        <div class="choc-item" onclick="openCard(this, '🍩 Silk Fudge', 'Dont forget to eat my hasnaa !')">🍬</div>
         <div class="choc-item" onclick="openCard(this, '🍓 Strawberry Truffle', 'Reminder: You are doing amazing, even if you feel tired today.')">🍓</div>
-        <div class="choc-item" onclick="openCard(this, '🌰 Hazelnut Crisp', 'Sending you the biggest, warmest virtual hug right now!')">🌰</div>
+        <div class="choc-item" onclick="openCard(this, '🌰 Hazelnut Crisp', 'Sending you the biggest, warmest hugs right now!')">🌰</div>
         <div class="choc-item" onclick="openCard(this, '🍮 Dark Chocolate', 'Zero stress allowed for the rest of the day. Rest up!')">🍮</div>
-        <div class="choc-item" onclick="openCard(this, '✨ Honey Praline', 'You are deeply loved and appreciated every single day.')">🍯</div>
+        <div class="choc-item" onclick="openCard(this, '✨ Honey Praline', 'You are deeply loved and appreciated and admired every single day.')">🍯</div>
         <div class="choc-item" onclick="openCard(this, '🍪 Cookie Cream', 'Take a cozy nap whenever you want today!')">🍪</div>
       </div>
     </section>
@@ -549,7 +549,7 @@
     <!-- 2. BOUQUET TAB -->
     <section class="tab-content" id="tab-bouquet">
       <div class="section-header">
-        <h2>Build Your Custom Bouquet</h2>
+        <h2>Some Flowers For A Sublime Flower Like YOU</h2>
         <p>Pick flowers to arrange your very own bouquet!</p>
       </div>
 
@@ -568,7 +568,7 @@
     <!-- 3. COFFEE & HEATING PAD TAB -->
     <section class="tab-content" id="tab-cozy">
       <div class="section-header">
-        <h2>Cozy Drinks & Warmth</h2>
+        <h2>Hot Milk For Hot Babe</h2>
         <p>Tap the mug to stir your drink or add sweet toppings!</p>
       </div>
 
@@ -778,8 +778,8 @@
           banner.innerText = "💖 Almost max warmth! Sending soft blanket squeezes...";
         } else if (comfortLevel >= 100) {
           padFace.innerText = "(⁠⁠⊃⁠｡⁠•́⁠‿⁠•̀⁠｡⁠)⁠⊃";
-          padLabel.innerText = "100% MAXIMUM WARMTH";
-          banner.innerText = "🎉 100% MAXIMUM COMFORT! You are completely safe, loved, and warm!";
+          padLabel.innerText = "100% MAXIMUM COMFORT! You are completely safe, loved, and warm!";
+          banner.innerText = "🎉 I LOVE YOU!";
           confetti({ particleCount: 70, spread: 80, origin: { y: 0.7 } });
         }
       } else {
